@@ -26,6 +26,18 @@ spec:
       - name: locust
         image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
         imagePullPolicy: {{ .Values.image.pullPolicy }}
+        {{- if .Values.master.command }}
+        command:
+        {{- range .Values.master.command }}
+          -- {{ . | quote }}
+        {{- end }}
+        {{- end }}
+        {{- if .Values.master.args }}
+        args:
+        {{- range .Values.master.args }}
+          -- {{ . | quote }}
+        {{- end }}
+        {{- end }}
         resources:
 {{ toYaml .Values.worker.resources | indent 10 }}
         env:
